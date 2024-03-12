@@ -1,6 +1,7 @@
 [//]: # (SPDX-License-Identifier: CC-BY-4.0)
 [//]: # (TODO Customize project readme)
 
-# template-code
+# ML-KEM libjade
 
-Template for creating code repositories, with basic file setup included
+The code provided in this repository comes from the libjade cryptographic library.
+See https://formosa-crypto.org for more information.
