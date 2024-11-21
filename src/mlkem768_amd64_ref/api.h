@@ -1,18 +1,18 @@
-#ifndef JADE_KEM_mlkem_mlkem768_amd64_ref_API_H
-#define JADE_KEM_mlkem_mlkem768_amd64_ref_API_H
+#ifndef jade_kem_mlkem_mlkem768_amd64_ref_API_H
+#define jade_kem_mlkem_mlkem768_amd64_ref_API_H
 
 #include <stdint.h>
 
-#define JADE_KEM_mlkem_mlkem768_amd64_ref_SECRETKEYBYTES 2400
-#define JADE_KEM_mlkem_mlkem768_amd64_ref_PUBLICKEYBYTES 1184
-#define JADE_KEM_mlkem_mlkem768_amd64_ref_CIPHERTEXTBYTES 1088
-#define JADE_KEM_mlkem_mlkem768_amd64_ref_KEYPAIRCOINBYTES 64
-#define JADE_KEM_mlkem_mlkem768_amd64_ref_ENCCOINBYTES 32
-#define JADE_KEM_mlkem_mlkem768_amd64_ref_BYTES 32
+#define jade_kem_mlkem_mlkem768_amd64_ref_SECRETKEYBYTES 2400
+#define jade_kem_mlkem_mlkem768_amd64_ref_PUBLICKEYBYTES 1184
+#define jade_kem_mlkem_mlkem768_amd64_ref_CIPHERTEXTBYTES 1088
+#define jade_kem_mlkem_mlkem768_amd64_ref_KEYPAIRCOINBYTES 64
+#define jade_kem_mlkem_mlkem768_amd64_ref_ENCCOINBYTES 32
+#define jade_kem_mlkem_mlkem768_amd64_ref_BYTES 32
 
-#define JADE_KEM_mlkem_mlkem768_amd64_ref_ALGNAME "mlkem768"
-#define JADE_KEM_mlkem_mlkem768_amd64_ref_ARCH "amd64"
-#define JADE_KEM_mlkem_mlkem768_amd64_ref_IMPL "ref"
+#define jade_kem_mlkem_mlkem768_amd64_ref_ALGNAME "mlkem768"
+#define jade_kem_mlkem_mlkem768_amd64_ref_ARCH "amd64"
+#define jade_kem_mlkem_mlkem768_amd64_ref_IMPL "ref"
 
 int jade_kem_mlkem_mlkem768_amd64_ref_keypair_derand(
   uint8_t *public_key,
