@@ -17,7 +17,7 @@
 int jade_kem_mlkem_mlkem768_amd64_ref_keypair_derand(
   uint8_t *public_key,
   uint8_t *secret_key,
-  const uint8_t *coins
+  const uint8_t *random_coins
 );
 
 int jade_kem_mlkem_mlkem768_amd64_ref_keypair(
@@ -29,7 +29,7 @@ int jade_kem_mlkem_mlkem768_amd64_ref_enc_derand(
   uint8_t *ciphertext,
   uint8_t *shared_secret,
   const uint8_t *public_key,
-  const uint8_t *coins
+  const uint8_t *random_coins
 );
 
 int jade_kem_mlkem_mlkem768_amd64_ref_enc(
