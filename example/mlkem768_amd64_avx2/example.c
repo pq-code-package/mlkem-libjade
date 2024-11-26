@@ -1,13 +1,15 @@
 // notes about this file:
 //
-// this file contains an example of how to use the corresponding Jasmin MLKEM implementation
+// this file contains an example of how to use the corresponding Jasmin MLKEM
+// implementation:
 // - we distribute this file **purely** for illustration purposes
-// - this file was only tested in Debian and using the corresponding _linux.s file
-// - to compile and execute this file, type `make` and `./example-linux`
+// - this file was only tested in Debian and using the corresponding .s file
+// - to compile and execute this file, type `make` and `./example`
 // - what it does:
 //   - it runs keypair, enc(apsulate), and dec(apsulate)
 //   - it prints the outputs/arguments of the functions
-//   - and it performs a simple check (shared secret from encapsulate is the same after decapsulate)
+//   - and it performs a simple check (shared secret from encapsulate is the
+//     same after decapsulate)
 
 #include <stdint.h>
 #include <string.h>
