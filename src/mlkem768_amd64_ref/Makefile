@@ -1,16 +1,12 @@
 JASMINC ?=jasminc
 
 JASMINC_FLAGS_COMMON ?=-nowarning -set0 -noinsertarraycopy -ATT -arch x86-64
-JASMINC_FLAGS_LINUX ?=$(JASMINC_FLAGS_COMMON) -call-conv linux -stack-zero loopSCT -stack-zero-size u64
-JASMINC_FLAGS_WINDOWS ?=$(JASMINC_FLAGS_COMMON) -call-conv windows
+JASMINC_FLAGS ?=$(JASMINC_FLAGS_COMMON) -call-conv linux -stack-zero loopSCT -stack-zero-size u64
 
-default: mlkem768_amd64_ref_linux.s mlkem768_amd64_ref_windows.s
+default: mlkem768_amd64_ref.s
 
-mlkem768_amd64_ref_linux.s: mlkem768_amd64_ref.jazz
-	$(JASMINC) $(JASMINC_FLAGS_LINUX) -o $@ $<
-
-mlkem768_amd64_ref_windows.s: mlkem768_amd64_ref.jazz
-	$(JASMINC) $(JASMINC_FLAGS_WINDOWS) -o $@ $<
+mlkem768_amd64_ref.s: mlkem768_amd64_ref.jazz
+	$(JASMINC) $(JASMINC_FLAGS) -o $@ $<
 
 distclean:
 	rm -f *.s
