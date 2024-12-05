@@ -1,3 +1,5 @@
+.PHONY: __phony
+
 CC ?=gcc
 CFLAGS ?=-Wall -Wextra -O3
 
@@ -13,12 +15,15 @@ SRC :=$(abspath ../src/)
 BIN := \
  mlkem768_amd64_ref\
  mlkem768_amd64_avx2
-
 BIN :=$(addprefix bin/,$(BIN))
+BIN_OUT :=$(addsuffix .csv,$(BIN))
 
-default: $(BIN)
+default: run
 
-.PHONY: __phony
+#----------------------------------------------------------
+#-- build
+
+build: $(BIN)
 $(BIN):
 bin/%: __phony | bin/
 	$(CC) $(CFLAGS) -o $@ \
@@ -34,6 +39,20 @@ bin/%: __phony | bin/
 	  $(SRC)/$*/$*.s \
 	  $(SRC)/$*/jasmin_syscall.c \
 	  -lcrypto
+
+#----------------------------------------------------------
+#-- run
+
+run: $(BIN_OUT)
+	for i in $(BIN_OUT); do \
+		echo "$$i"; cat $$i; echo ""; \
+	done
+
+bin/%.csv: bin/%
+	./$< > $@
+
+#----------------------------------------------------------
+#-- other
 
 bin/: ; @mkdir -p $@
 
