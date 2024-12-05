@@ -1,8 +1,9 @@
 
-CFLAGS ?= -Wall -Wextra 
+CC ?=cc
+CFLAGS ?=-Wall -Wextra
 SRC :=../../src/mlkem768_amd64_ref
 
-example: example.c $(SRC)/mlkem768_amd64_ref.s $(SRC)/jasmin_syscall.c
+example: example.c $(SRC)/mlkem768_amd64_ref.s
 	$(CC) $(CFLAGS) -o $@ -I $(SRC)/ $^ -lcrypto
 
 clean:

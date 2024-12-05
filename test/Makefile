@@ -33,8 +33,7 @@ bin/%_checksum$(1): __phony | bin/
 	  -I $(SRC)/$$*/ checksums.c \
 	  -DTESTING_LOOPS=$$(TESTING_LOOPS) \
 	  -DNAMESPACE=jade_kem_mlkem_$$* \
-	  $(SRC)/$$*/$$*.s \
-	  $(SRC)/$$*/jasmin_syscall.c
+	  $(SRC)/$$*/$$*.s
 endef
 
 $(BIN_CHECKSMALL):
@@ -61,6 +60,7 @@ bin/%.out: bin/%
 
 #----------------------------------------------------------
 #-- other
+
 bin/: ; @mkdir -p $@
 
 clean: __phony

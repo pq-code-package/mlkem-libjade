@@ -37,7 +37,6 @@ bin/%: __phony | bin/
 	  -DPRINT_RUNS_MEDIAN=$(PRINT_RUNS_MEDIAN) \
 	  -DPRINT_JUST_DERAND=$(PRINT_JUST_DERAND) \
 	  $(SRC)/$*/$*.s \
-	  $(SRC)/$*/jasmin_syscall.c \
 	  -lcrypto
 
 #----------------------------------------------------------
