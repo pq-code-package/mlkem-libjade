@@ -1,0 +1,3 @@
+[submodule "external/pq_crystals_kyber"]
+	path = external/pq_crystals_kyber
+	url = https://github.com/pq-crystals/kyber.git
