@@ -108,3 +108,6 @@ clean:
 	$(MAKE) -C $(EXTERNAL)/pq_crystals_kyber/ref/ clean
 	$(MAKE) -C $(EXTERNAL)/pq_crystals_kyber/avx2/ clean
 
+echo-vars:
+	@echo "BIN: $(BIN)"
+
