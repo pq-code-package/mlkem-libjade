@@ -56,7 +56,7 @@ static void print_str_u8(const char *str, const uint8_t *a, size_t l)
   print_u8(a, l);
 }
 
-//
+// ////////////////////////////////////////////////////////////////////////////
 // IMPORTANT NOTES:
 //
 // The Jasmin implementation of ML-KEM includes the randomized and derandomized
@@ -109,6 +109,14 @@ void randombytes(uint8_t *dest, uint64_t length_in_bytes)
   assert(r == 1); // man RAND_bytes says "RAND_bytes() and RAND_priv_bytes()
   // return 1 on success"
 }
+
+uint8_t* __jasmin_syscall_randombytes__(uint8_t* dest, uint64_t length_in_bytes)
+{
+  randombytes(dest, length_in_bytes);
+  return dest;
+}
+
+// ////////////////////////////////////////////////////////////////////////////
 
 //
 // this corresponds to the api.h file that can be found in folders

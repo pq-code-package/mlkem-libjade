@@ -233,8 +233,9 @@ static void pb_print_1(
 // compliance requirements, etc.
 // ****************************************************************************
 //
-// Next, and purely for illustration purposes, we define randombytes.
-//
+// Next, and purely for illustration purposes, we define randombytes and
+// __jasmin_syscall_randombytes__.
+
 #include <openssl/rand.h>
 
 void randombytes(uint8_t *dest, uint64_t length_in_bytes)
@@ -251,6 +252,13 @@ void randombytes(uint8_t *dest, uint64_t length_in_bytes)
   assert(r == 1); // man RAND_bytes says "RAND_bytes() and RAND_priv_bytes()
   // return 1 on success"
 }
+
+uint8_t* __jasmin_syscall_randombytes__(uint8_t* dest, uint64_t length_in_bytes)
+{
+  randombytes(dest, length_in_bytes);
+  return dest;
+}
+
 ///////////////////////////////////////////////////////////////////////////////
 
 int main(int argc, char**argv __attribute__((unused)))

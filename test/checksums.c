@@ -28,7 +28,7 @@
 // api
 
 #ifndef NAMESPACE
-#error "crypto_kem.c requires the macro NAMESPACE to be defined. \
+#error "checksums.c requires the macro NAMESPACE to be defined. \
         - for instance, jade_kem_mlkem_mlkem768_amd64_ref_ \
           or jade_kem_mlkem_mlkem768_amd64_avx2. \
         For examples, check bench/Makefile."
@@ -257,6 +257,12 @@ void resetrandombytes1(void)
 void randombytes1(uint8_t* x, uint64_t xlen)
 {
   randombytes_internal(x,xlen,g1,r1,&pos1);
+}
+
+uint8_t* __jasmin_syscall_randombytes__(uint8_t* dest, uint64_t length_in_bytes)
+{
+  randombytes(dest, length_in_bytes);
+  return dest;
 }
 
 // ////////////////////////////////////////////////////////////////////////////
