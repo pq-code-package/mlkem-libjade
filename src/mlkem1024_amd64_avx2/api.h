@@ -4,6 +4,7 @@
 #include <stdint.h>
 
 #define jade_kem_mlkem_mlkem1024_amd64_avx2_SECRETKEYBYTES 3168
+#define jade_kem_mlkem_mlkem1024_amd64_avx2_INDCPA_SECRETKEYBYTES 1536
 #define jade_kem_mlkem_mlkem1024_amd64_avx2_PUBLICKEYBYTES 1568
 #define jade_kem_mlkem_mlkem1024_amd64_avx2_CIPHERTEXTBYTES 1568
 #define jade_kem_mlkem_mlkem1024_amd64_avx2_KEYPAIRCOINBYTES 64
