@@ -23,8 +23,10 @@ SRC :=$(abspath ../src/)
 BIN := \
  mlkem768_amd64_ref\
  mlkem768_amd64_avx2\
+ mlkem1024_amd64_avx2\
  pqcrystals_kyber768_ref\
- pqcrystals_kyber768_avx2
+ pqcrystals_kyber768_avx2\
+ pqcrystals_kyber1024_avx2
 
 BIN :=$(addprefix bin/,$(BIN))
 BIN_OUT :=$(addsuffix .csv,$(BIN))
@@ -57,6 +59,16 @@ bin/pqcrystals_kyber768_avx2: $(EXTERNAL)/pq_crystals_kyber/avx2/libpqcrystals_f
 	  -Wl,-rpath,$(EXTERNAL)/pq_crystals_kyber/avx2 \
 	  -lcrypto
 
+bin/pqcrystals_kyber1024_avx2: $(EXTERNAL)/pq_crystals_kyber/avx2/libpqcrystals_fips202_ref.so $(EXTERNAL)/pq_crystals_kyber/avx2/libpqcrystals_fips202x4_avx2.so $(EXTERNAL)/pq_crystals_kyber/avx2/libpqcrystals_kyber1024_avx2.so __phony | bin/
+	$(CC) $(CFLAGS) -o $@ \
+	  -I $(EXTERNAL)/pq_crystals_kyber/avx2/ crypto_kem.c \
+	  -DNAMESPACE=pqcrystals_kyber1024_avx2 \
+	  $(CONFIG) \
+	  -L$(EXTERNAL)/pq_crystals_kyber/avx2 \
+	  -lpqcrystals_kyber1024_avx2 -lpqcrystals_fips202x4_avx2 -lpqcrystals_fips202_ref \
+	  -Wl,-rpath,$(EXTERNAL)/pq_crystals_kyber/avx2 \
+	  -lcrypto
+
 bin/%: __phony | bin/
 	$(CC) $(CFLAGS) -o $@ \
 	  -I $(SRC)/$*/ crypto_kem.c \
@@ -85,6 +97,17 @@ $(EXTERNAL)/pq_crystals_kyber/avx2/libpqcrystals_fips202x4_avx2.so: __phony
 
 $(EXTERNAL)/pq_crystals_kyber/avx2/libpqcrystals_kyber768_avx2.so: __phony
 	$(MAKE) CFLAGS="-Wall -Wextra -Wpedantic -Wmissing-prototypes -Wredundant-decls -Wshadow -Wpointer-arith -mavx2 -mbmi2 -mpopcnt -march=native -mtune=native -O3 -fomit-frame-pointer -z noexecstack -mno-avx512f" -C $(EXTERNAL)/pq_crystals_kyber/avx2/ libpqcrystals_kyber768_avx2.so
+
+#-- pqcrystals-kyber1024-avx2
+
+$(EXTERNAL)/pq_crystals_kyber/avx2/libpqcrystals_fips202_ref.so: __phony
+	$(MAKE) CFLAGS="-Wall -Wextra -Wpedantic -Wmissing-prototypes -Wredundant-decls -Wshadow -Wpointer-arith -mavx2 -mbmi2 -mpopcnt -march=native -mtune=native -O3 -fomit-frame-pointer -z noexecstack -mno-avx512f" -C $(EXTERNAL)/pq_crystals_kyber/avx2/ libpqcrystals_fips202_ref.so
+
+$(EXTERNAL)/pq_crystals_kyber/avx2/libpqcrystals_fips202x4_avx2.so: __phony
+	$(MAKE) CFLAGS="-Wall -Wextra -Wpedantic -Wmissing-prototypes -Wredundant-decls -Wshadow -Wpointer-arith -mavx2 -mbmi2 -mpopcnt -march=native -mtune=native -O3 -fomit-frame-pointer -z noexecstack -mno-avx512f" -C $(EXTERNAL)/pq_crystals_kyber/avx2/ libpqcrystals_fips202x4_avx2.so
+
+$(EXTERNAL)/pq_crystals_kyber/avx2/libpqcrystals_kyber1024_avx2.so: __phony
+	$(MAKE) CFLAGS="-Wall -Wextra -Wpedantic -Wmissing-prototypes -Wredundant-decls -Wshadow -Wpointer-arith -mavx2 -mbmi2 -mpopcnt -march=native -mtune=native -O3 -fomit-frame-pointer -z noexecstack -mno-avx512f" -C $(EXTERNAL)/pq_crystals_kyber/avx2/ libpqcrystals_kyber1024_avx2.so
 
 #----------------------------------------------------------
 #-- run
