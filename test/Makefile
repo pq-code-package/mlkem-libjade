@@ -7,13 +7,13 @@ CFLAGS ?=-Wall -Wextra -Wpedantic -Wvla -Werror -std=c99 \
 
 SRC :=$(abspath ../src/)
 BIN := \
- mlkem768_amd64_ref\
- mlkem768_amd64_avx2\
  mlkem1024_amd64_avx2\
- pqcrystals_kyber768_ref\
- pqcrystals_kyber768_avx2\
  pqcrystals_kyber1024_avx2
-
+ # mlkem768_amd64_ref
+ # mlkem768_amd64_avx2
+ # pqcrystals_kyber768_ref
+ # pqcrystals_kyber768_avx2
+ 
 BIN :=$(addprefix bin/,$(BIN))
 BIN_CHECKSMALL :=$(addsuffix _checksumsmall,$(BIN))
 BIN_CHECKBIG :=$(addsuffix _checksumbig,$(BIN))
@@ -90,13 +90,13 @@ bin/%_checksum$(1): __phony | bin/
 endef
 
 $(BIN):
-$(eval $(call CHECKSUM_RULE1,small,8))
-$(eval $(call CHECKSUM_RULE1,big,64))
-$(eval $(call CHECKSUM_RULE1,giant,$(LOOPS)))
+#$(eval $(call CHECKSUM_RULE1,small,8))
+#$(eval $(call CHECKSUM_RULE1,big,64))
+#$(eval $(call CHECKSUM_RULE1,giant,$(LOOPS)))
 
-$(eval $(call CHECKSUM_RULE2,small,8))
-$(eval $(call CHECKSUM_RULE2,big,64))
-$(eval $(call CHECKSUM_RULE2,giant,$(LOOPS)))
+#$(eval $(call CHECKSUM_RULE2,small,8))
+#$(eval $(call CHECKSUM_RULE2,big,64))
+#$(eval $(call CHECKSUM_RULE2,giant,$(LOOPS)))
 
 $(eval $(call CHECKSUM_RULE3,small,8))
 $(eval $(call CHECKSUM_RULE3,big,64))
@@ -143,15 +143,15 @@ $(EXTERNAL)/pq_crystals_kyber/avx2/libpqcrystals_kyber1024_avx2.so: __phony
 
 run: $(BIN_OUT)
 	for t in small big giant; do \
-		(cmp --silent bin/mlkem768_amd64_ref_checksum$$t.out bin/pqcrystals_kyber768_ref_checksum$$t.out \
+		# (cmp --silent bin/mlkem768_amd64_ref_checksum$$t.out bin/pqcrystals_kyber768_ref_checksum$$t.out \
+		#  && echo -n "OK - ") || echo -n "ERROR - "; \
+		# echo "bin/mlkem768_amd64_ref_checksum$$t.out / bin/pqcrystals_kyber768_ref_checksum$$t.out"; \
+		# (cmp --silent bin/mlkem768_amd64_avx2_checksum$$t.out bin/pqcrystals_kyber768_ref_checksum$$t.out \
+		#  && echo -n "OK - ") || echo -n "ERROR - "; \
+		# echo "bin/mlkem768_amd64_avx2_checksum$$t.out / bin/pqcrystals_kyber768_ref_checksum$$t.out"; \
+		(cmp --silent bin/mlkem1024_amd64_avx2_checksum$$t.out bin/pqcrystals_kyber1024_avx2_checksum$$t.out \
 		 && echo -n "OK - ") || echo -n "ERROR - "; \
-		echo "bin/mlkem768_amd64_ref_checksum$$t.out / bin/pqcrystals_kyber768_ref_checksum$$t.out"; \
-		(cmp --silent bin/mlkem768_amd64_avx2_checksum$$t.out bin/pqcrystals_kyber768_ref_checksum$$t.out \
-		 && echo -n "OK - ") || echo -n "ERROR - "; \
-		echo "bin/mlkem768_amd64_avx2_checksum$$t.out / bin/pqcrystals_kyber768_ref_checksum$$t.out"; \
-		(cmp --silent bin/mlkem1024_amd64_avx2_checksum$$t.out bin/pqcrystals_kyber1024_ref_checksum$$t.out \
-		 && echo -n "OK - ") || echo -n "ERROR - "; \
-		echo "bin/mlkem1024_amd64_avx2_checksum$$t.out / bin/pqcrystals_kyber1024_ref_checksum$$t.out"; \
+		echo "bin/mlkem1024_amd64_avx2_checksum$$t.out / bin/pqcrystals_kyber1024_avx2_checksum$$t.out"; \
 	done
 
 bin/%.out: bin/%

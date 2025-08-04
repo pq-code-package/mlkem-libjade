@@ -433,23 +433,6 @@ void output_compare(const uint8_t *x2, const uint8_t *x, uint64_t xlen, const ch
   }
 }
 
-void checksum(uint8_t *checksum_state, uint8_t *x, uint64_t xlen)
-{
-  uint8_t block[16];
-  uint64_t i;
-
-  while (xlen >= 16)
-  { core(checksum_state, x, checksum_state);
-    x += 16;
-    xlen -= 16;
-  }
-  FOR(i,16) block[i] = 0;
-  FOR(i,xlen) block[i] = x[i];
-  block[xlen] = 1;
-  checksum_state[0] ^= 1;
-  core(checksum_state,block,checksum_state);
-}
-
 static void printword(const char *s)
 {
   if (!*s) putchar('-');
@@ -463,6 +446,39 @@ static void printword(const char *s)
   }
   //putchar(' ');
 }
+/*
+static void dump_hex(uint8_t *x, uint64_t xlen) {
+  uint64_t i;
+  char *xhex = (char *)malloc(2*xlen+1);
+  for ( i = 0;i < xlen;++i) {
+    xhex[2 * i] = "0123456789abcdef"[15 & (x[i] >> 4)];
+    xhex[2 * i + 1] = "0123456789abcdef"[15 & x[i]];
+  }
+  xhex[2 * i] = 0;
+  printword(xhex);
+  free(xhex);
+}
+*/
+
+void checksum(uint8_t *checksum_state, uint8_t *x, uint64_t xlen)
+{
+  uint8_t block[16];
+  uint64_t i;
+
+  //dump_hex(x,xlen);
+  while (xlen >= 16)
+  { core(checksum_state, x, checksum_state);
+    x += 16;
+    xlen -= 16;
+  }
+  FOR(i,16) block[i] = 0;
+  FOR(i,xlen) block[i] = x[i];
+  block[xlen] = 1;
+  checksum_state[0] ^= 1;
+  core(checksum_state,block,checksum_state);
+}
+
+
 
 void fail(const char *why)
 {
