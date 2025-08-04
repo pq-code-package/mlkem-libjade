@@ -59,21 +59,38 @@ static void print_str_u8(const char *str, const uint8_t *a, size_t l)
 // ////////////////////////////////////////////////////////////////////////////
 // IMPORTANT NOTES:
 //
-// The Jasmin implementation of ML-KEM 1024 is derandomized.
+// The Jasmin implementation of ML-KEM includes the randomized and derandomized
+// API. For instance, there are two functions that allow to generate a keypair:
+// keypair and keypair_derand.
 //
 // The first function, keypair, expects two arguments: public_key and 
-// secret_key (pointers to a memory region with an appropriate length)
-// plust the random coins.
+// secret_key (pointers to a memory region with an appropriate length).
 //
+// When executed, the Jasmin implementation will call the function
+// __jasmin_syscall_randombytes__ to get randombytes. This function is
+// defined in the file jasmin_syscall.c, which is located in the corresponding
+// implementation folder, next to the Jasmin and assembly files, for the user's
+// convenience. __jasmin_syscall_randombytes__ must not be changed.
+//
+// Even though we provide a __jasmin_syscall_randombytes__ function, we only
+// provide a partial definition of it: __jasmin_syscall_randombytes__ calls
+// randombytes, and randombytes is not defined in this repository (except
+// for demonstration and testing purposes).
+//
+// The keypair_derand function expects an additional argument: random_coins
+// (a pointer to a memory region with an appropriate length containing 
+// cryptographically secure random bytes) and, as such, it does not call
+// __jasmin_syscall_randombytes__ because it gets the random bytes it
+// needs from the caller. The case is similar for the enc(apsulate) and
+// enc_derand functions.
 //
 // ****************************************************************************
 // WARNING: In REAL-WORLD DEPLOYMENTS, it is the USER's RESPONSIBILITY to 
 // implement/select/provide a cryptographically secure implementation of
-// random coin generation that fulfills, for instance, their organization's policies,
+// randombytes that fulfills, for instance, their organization's policies,
 // compliance requirements, etc. 
 // ****************************************************************************
 //
-
 // Next, and purely for illustration purposes, we define randombytes.
 //
 #include <openssl/rand.h>
@@ -93,11 +110,15 @@ void randombytes(uint8_t *dest, uint64_t length_in_bytes)
   // return 1 on success"
 }
 
+uint8_t* __jasmin_syscall_randombytes__(uint8_t* dest, uint64_t length_in_bytes)
+{
+  randombytes(dest, length_in_bytes);
+  return dest;
+}
 
 // ////////////////////////////////////////////////////////////////////////////
 
 //
-
 // this corresponds to the api.h file that can be found in folders
 // mlkem-libjade/src/mlkem1024_** (check Makefile and -I compiler option)
 #include "api.h"
@@ -146,6 +167,24 @@ int main(void)
   uint8_t enc_random_coins[mlkem1024_ENCCOINBYTES];
 
   print_info(mlkem1024_ALGNAME, mlkem1024_ARCH, mlkem1024_IMPL);
+
+  // create key pair
+  r = mlkem1024_keypair(public_key, secret_key);
+    assert(r == 0);
+
+  // encapsulate
+  r = mlkem1024_enc(ciphertext, shared_secret_a, public_key);
+    assert(r == 0);
+
+  // decapsulate
+  r = mlkem1024_dec(shared_secret_b, ciphertext, secret_key);
+    assert(r == 0);
+    assert(memcmp(shared_secret_a, shared_secret_b, mlkem1024_BYTES) == 0);
+
+  print_str_u8("secret_key", secret_key, mlkem1024_SECRETKEYBYTES);
+  print_str_u8("public_key", public_key, mlkem1024_PUBLICKEYBYTES);
+  print_str_u8("ciphertext", ciphertext, mlkem1024_CIPHERTEXTBYTES);
+  print_str_u8("shared_secret", shared_secret_a, mlkem1024_BYTES);
 
   // 
   // create key pair using derand function (random coins are given as input)
