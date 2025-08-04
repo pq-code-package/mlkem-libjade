@@ -143,8 +143,15 @@ $(EXTERNAL)/pq_crystals_kyber/avx2/libpqcrystals_kyber1024_avx2.so: __phony
 
 run: $(BIN_OUT)
 	for t in small big giant; do \
-		(cmp --silent bin/mlkem1024_amd64_avx2_checksum$$t.out bin/pqcrystals_kyber768_ref_checksum$$t.out\  
-		&& echo -n "OK - ") || echo -n "ERROR - "; 
+		(cmp --silent bin/mlkem768_amd64_ref_checksum$$t.out bin/pqcrystals_kyber768_ref_checksum$$t.out \
+		 && echo -n "OK - ") || echo -n "ERROR - "; \
+		echo "bin/mlkem768_amd64_ref_checksum$$t.out / bin/pqcrystals_kyber768_ref_checksum$$t.out"; \
+		(cmp --silent bin/mlkem768_amd64_avx2_checksum$$t.out bin/pqcrystals_kyber768_ref_checksum$$t.out \
+		 && echo -n "OK - ") || echo -n "ERROR - "; \
+		echo "bin/mlkem768_amd64_avx2_checksum$$t.out / bin/pqcrystals_kyber768_ref_checksum$$t.out"; \
+		(cmp --silent bin/mlkem1024_amd64_avx2_checksum$$t.out bin/pqcrystals_kyber1024_ref_checksum$$t.out \
+		 && echo -n "OK - ") || echo -n "ERROR - "; \
+		echo "bin/mlkem1024_amd64_avx2_checksum$$t.out / bin/pqcrystals_kyber1024_ref_checksum$$t.out"; \
 	done
 
 bin/%.out: bin/%
