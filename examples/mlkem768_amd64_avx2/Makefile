@@ -1,7 +1,7 @@
 
 CC ?=cc
 CFLAGS ?=-Wall -Wextra
-SRC :=../../src/mlkem768_amd64_ref
+SRC :=../../src/mlkem768_amd64_avx2
 
 example: example.c $(SRC)/mlkem768_amd64_avx2.s
 	$(CC) $(CFLAGS) -o $@ -I $(SRC)/ $^ -lcrypto
