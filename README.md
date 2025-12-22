@@ -3,87 +3,41 @@
 
 # ML-KEM libjade
 
-## Current status
+# Getting started
 
-This repository includes two ML-KEM-768 Jasmin implementations,
-[src/mlkem768_amd64_avx2/](https://github.com/tfaoliveira/mlkem-libjade/tree/main/src/mlkem768_amd64_avx2) and
-[src/mlkem768_amd64_ref/](https://github.com/tfaoliveira/mlkem-libjade/tree/main/src/mlkem768_amd64_ref):
-* they **will be updated soon**, as significant performance and security improvements are on the verge of completion.
-* they were also published in the
-[artifact](https://artifacts.formosa-crypto.org) of the
-[CRYPTO 24](https://crypto.iacr.org/2024/program.php) paper,
-[Formally verifying Kyber Episode V: Machine-checked IND-CCA security and correctness of ML-KEM in EasyCrypt](https://eprint.iacr.org/2024/843).
+This repository contains implementations of ML-KEM-768 and MLK-KEM-1024 for the x86-64 architecture with AVX2 instruction extensions.
 
-## TLDR: How can I quickly test this code?
+It was produced using the [Formosa Cypto](https://formosa-crypto) tool-chain: the formally verified source-code is written in the Jasmin programming language and the assembly is produced by the Jasmin certified compiler.
 
-0. Clone this repository.
-1. Go to [examples/mlkem768_amd64_avx2](https://github.com/tfaoliveira/mlkem-libjade/tree/main/examples/mlkem768_amd64_avx2)
-(or [examples/mlkem768_amd64_ref](https://github.com/tfaoliveira/mlkem-libjade/tree/main/examples/mlkem768_amd64_ref))
-and run `make`, then `./example`.
-3. Read file `example.c`, including the discussion in comments.
-4. Check the corresponding [src/](https://github.com/tfaoliveira/mlkem-libjade/tree/main/src/) folders.
+Instructions on, and an example of, how to use the code can be found in the `examples` folder.
 
-If you are already familiar with ML-KEM-768 API, this should be enough for you to prototype something.
+## Status 
 
----
+**In Development**: This first release is in the process of being adopted for industrial deployment,
+so the available code is production-ready. 
+However, the public-key validation code recommended by FIPS-203 for ML-KEM implementations is not yet implemented.
 
-We provide more details next. When running `make`, you should be able to see the following:
+## Constant-time goals / properties
 
-```
-cc -Wall -Wextra  -o example -I ../../src/mlkem768_amd64_avx2/ example.c ../../src/mlkem768_amd64_avx2/mlkem768_amd64_avx2.s -lcrypto
-```
+The code is formally verified for the constant-time property and speculative constant-time property using the type-system shipped with the Jasmin compiler.
 
-Which produces a program named `example` that runs the corresponding
-Jasmin ML-KEM-768 implementation and prints the inputs/outputs of the
-executed functions to the terminal. Note that `./example` is not
-deterministic, meaning that running more than once always prints
-different data because the program gets random bytes for each execution.
-There are some important comments in [example.c](https://github.com/tfaoliveira/mlkem-libjade/blob/main/examples/mlkem768_amd64_avx2/example.c#L59),
-regarding random bytes that the reader must not skip: just for
-illustrative purposes, we use the function `RAND_bytes` from
-OpenSSL, and that is why `-lcrypto` is used during compilation.
-More details below.
+This means that the compiler guarantees that only public (or explicitly declassified) values are passed as inputs to instructions that are modelled as potentially introducing input-dependent timing fluctuations. This includes, but is not restricted to, all memory accesses and branching operations. 
 
-Next, we provide an overview of some files: first, those located in the src/ folder, and then those in the examples/ folder.
-In the folder [src/mlkem768_amd64_avx2/](https://github.com/tfaoliveira/mlkem-libjade/tree/main/src/mlkem768_amd64_avx2)
-you can find the following (the contents are similar for [src/mlkem768_amd64_ref/](https://github.com/tfaoliveira/mlkem-libjade/tree/main/src/mlkem768_amd64_ref)):
+In these implementations `declassify` annotations are only used to justify the operation of the rejection sampling procedure that expands the public matrix of ML-KEM.
 
-* [mlkem768_amd64_avx2.jazz](https://github.com/tfaoliveira/mlkem-libjade/blob/main/src/mlkem768_amd64_avx2/mlkem768_amd64_avx2.jazz)
-is the Jasmin implementation, which is available in a single file for simplicity.
+## Verification scope
 
-* [mlkem768_amd64_avx2.s](https://github.com/tfaoliveira/mlkem-libjade/blob/main/src/mlkem768_amd64_avx2/mlkem768_amd64_avx2.s)
-is the assembly file resulting from compiling [mlkem768_amd64_avx2.jazz](https://github.com/tfaoliveira/mlkem-libjade/blob/main/src/mlkem768_amd64_avx2/mlkem768_amd64_avx2.jazz)
-with the [Jasmin](https://github.com/jasmin-lang/jasmin) compiler, 
-release [2024.07.2](https://github.com/jasmin-lang/jasmin/releases/tag/v2024.07.2).
-This file defines the ML-KEM-768 functions that can be used in C/C++/etc.
-You can recompile this file if you wish; you will need a recent release
-of the Jasmin compiler in such a case. We provide the assembly file so the
-user can get started quickly.
+These implementations are formally verified to be functionally correct (i.e., correct for all possible inputs) with respect to the specification of ML-KEM available in the Formosa Crypto [`crypto-specs`](https://github.com/formosa-crypto/crypto-specs) repository. The functional correctness proof currently assumes that the underlying SHA-3 implementation is correct. This assumption is expected to be removed during 2026.
 
-* [api.h](https://github.com/tfaoliveira/mlkem-libjade/blob/main/src/mlkem768_amd64_avx2/api.h)
-is the C header file for using [mlkem768_amd64_avx2.s](https://github.com/tfaoliveira/mlkem-libjade/blob/main/src/mlkem768_amd64_avx2/mlkem768_amd64_avx2.s).
-It contains the function's prototypes and corresponding macros defining,
-for instance, the public and secret key lengths.
+The implementations (in this case including also the SHA-3 code) are also formally verified for the Jasmin notion of `safety`, which means that the Coq/Roq proof that certifies the Jasmin compiler applies to the source code. Safety verification, in this sense, includes the usual restrictions that guarantee absence of undefined behaviors, including memory safety and absence of other run-time exceptions.
 
-* [jasmin_syscall.h](https://github.com/tfaoliveira/mlkem-libjade/blob/main/src/mlkem768_amd64_avx2/jasmin_syscall.h)
-is the file that provides the prototype for `__jasmin_syscall_randombytes__`.
-The ML-KEM-768 implementation needs to get cryptographically secure random bytes.
-In the case of the *randomized* implementation, the implementation itself needs
-to call an external function to obtain these random bytes. It is the user's responsibility
-to provide such a function to the Jasmin implementation, in this case, `__jasmin_syscall_randombytes__`.
+## Performance
 
-In folder [examples/mlkem768_amd64_avx2](https://github.com/tfaoliveira/mlkem-libjade/tree/main/examples/mlkem768_amd64_avx2)
-(respectively, [examples/mlkem768_amd64_ref](https://github.com/tfaoliveira/mlkem-libjade/tree/main/examples/mlkem768_amd64_ref)),
-you can find the following two files:
+Instructions on how to benchmark the code are available in the `bench` folder.
 
-* [Makefile](https://github.com/tfaoliveira/mlkem-libjade/blob/main/examples/mlkem768_amd64_avx2/Makefile)
-defines a rule to build the program `example` and to remove it, with `make clean`.
+## ACVP testing coverage
 
-* [example.c](https://github.com/tfaoliveira/mlkem-libjade/blob/main/examples/mlkem768_amd64_avx2/example.c)
-includes discussions about random bytes, the API, and namespacing, as well as
-the code that calls the functions for key generation, encapsulation,
-and decapsulation, followed by a check to ensure that the shared secret
-from encapsulate is equal to the one from decapsulate. It contains
-examples of *randomized* and *derandomized* APIs.
+The code is fuzzed for correctess with respect to the `https://github.com/pq-crystals/kyber` implementations.
+Information on how to reproduce the tests is available in the `tests` folder.
 
 
