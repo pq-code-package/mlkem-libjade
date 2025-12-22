@@ -27,7 +27,7 @@ In these implementations `declassify` annotations are only used to justify the o
 
 ## Verification scope
 
-These implementations are formally verified to be functionally correct (i.e., correct for all possible inputs) with respect to the specification of ML-KEM available in the Formosa Crypto [`crypto-specs`](https://github.com/formosa-crypto/crypto-specs) repository. The functional correctness proof currently assumes that the underlying SHA-3 implementation is correct. This assumption is expected to be removed during 2026.
+These implementations are formally verified to be functionally correct (i.e., correct for all possible inputs) with respect to the specification of ML-KEM available in the Formosa Crypto [`crypto-specs`](https://github.com/formosa-crypto/crypto-specs) repository. This specification is a transcription of FIPS-203 and it has, additionally, been formally proved in EasyCrypt to correctly instantiate a generic IND-CCA secure KEM construction. The functional correctness proof currently assumes that the underlying SHA-3 implementation is correct. This assumption is expected to be removed during 2026.
 
 The implementations (in this case including also the SHA-3 code) are also formally verified for the Jasmin notion of `safety`, which means that the Coq/Roq proof that certifies the Jasmin compiler applies to the source code. Safety verification, in this sense, includes the usual restrictions that guarantee absence of undefined behaviors, including memory safety and absence of other run-time exceptions. On the other hand, it includes also additional restrictions, namely that all memory regions passed to the assembly code are disjoint. 
 
