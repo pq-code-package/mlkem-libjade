@@ -38,3 +38,13 @@ Running `make clean` removes the `bin/` directory and invokes the corresponding 
 | enc_derand       | 42849         | 48129                      | 62188          | 68549                     |
 | dec              | 46210         | 53727                      | 66983          | 76633                     |
 
+## i7-11700K
+
+| operation        | mlkem768_avx2 | pqcrystals_kyber768_avx2   | mlkem1024_avx2 | pqcrystals_kyber1024_avx2 |
+|------------------|---------------|----------------------------|----------------|---------------------------|
+| keypair_derand   | 36077         | 38735                      | 50589          | 54533                     |
+| enc_derand       | 36840         | 39371                      | 52843          | 56626                     |
+| dec              | 39214         | 43679                      | 56018          | 62707                     |
+
+
+
