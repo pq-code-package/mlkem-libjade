@@ -5,7 +5,7 @@
 #endif
 
 #ifndef TIMINGS
-#define TIMINGS 1001
+#define TIMINGS 10001
 #endif
 
 #ifndef CHECK_SHARED_SECRET
