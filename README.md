@@ -38,6 +38,6 @@ Instructions on how to benchmark the code are available in the `bench` folder.
 ## ACVP testing coverage
 
 The code is fuzzed for correctess with respect to the `https://github.com/pq-crystals/kyber` implementations.
-Information on how to reproduce the tests is available in the `tests` folder.
+Information on how to reproduce the tests is available in the `test` folder.
 
 
