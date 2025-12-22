@@ -32,6 +32,7 @@ These implementations are formally verified to be functionally correct (i.e., co
 The implementations (in this case including also the SHA-3 code) are also formally verified for the Jasmin notion of `safety`, which means that the Coq/Roq proof that certifies the Jasmin compiler applies to the source code. Safety verification, in this sense, includes the usual restrictions that guarantee absence of undefined behaviors, including memory safety and absence of other run-time exceptions. On the other hand, it includes also additional restrictions, namely that all memory regions passed to the assembly code are disjoint. 
 
 All information about the formal verification of this code, including all the proof scripts and how to reproduce the machine-checked validation steps are available from the [formosa-mlkem](https://github.com/formosa-crypto/formosa-mlkem) repository.
+At the moment this relies on features of both EasyCrypt and the Jasmin compiler that are still in the process of being released, but this is expected to change in 2026.
 
 The following publications are relevant to understand the scope of the formal verification results, including the tool-chain architecture, the TCB, the properties proved for the specification, and overall formal verification approach:
 
