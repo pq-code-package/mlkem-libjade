@@ -7,7 +7,7 @@
 
 This repository contains implementations of ML-KEM-768 and MLK-KEM-1024 for the x86-64 architecture with AVX2 instruction extensions.
 
-It was produced using the [Formosa Cypto](https://formosa-crypto) tool-chain: the formally verified source-code is written in the [Jasmin](https://github.com/jasmin-lang/jasmin) programming language and the assembly is produced by the Jasmin certified compiler. Formal verification of specification security, functional correctness and safety are carried out in the [EasyCrypt](https://www.easycrypt.info/) proof assistant.
+It was produced using the [Formosa Cypto](https://formosa-crypto.org) tool-chain: the formally verified source-code is written in the [Jasmin](https://github.com/jasmin-lang/jasmin) programming language and the assembly is produced by the Jasmin certified compiler. Formal verification of specification security, functional correctness and safety are carried out in the [EasyCrypt](https://www.easycrypt.info/) proof assistant.
 
 Instructions on, and an example of, how to use the code can be found in the `examples` folder.
 
